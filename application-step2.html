@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirtelTigo Loan Application - Step 2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="script.js"></script>
+    <style>
+        .bg-at-blue { background-color: #002d5d; }
+        .text-at-blue { color: #002d5d; }
+        .error-shake { animation: shake 0.2s ease-in-out 0s 2; }
+        @keyframes shake {
+            0% { margin-left: 0rem; }
+            25% { margin-left: 0.5rem; }
+            75% { margin-left: -0.5rem; }
+            100% { margin-left: 0rem; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans min-h-screen">
+    <nav class="bg-white shadow-md p-3 sm:p-4 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex items-center justify-center px-4">
+            <img src="at-logo.jpg" alt="at logo" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover mr-2 sm:mr-3 border-2 border-at-blue shadow-sm">
+            <span class="text-lg sm:text-2xl font-black text-at-blue tracking-tight">Airteltigo</span>
+        </div>
+    </nav>
+
+    <div class="max-w-md mx-auto p-4 py-6 sm:py-8">
+        <a href="application.html" class="inline-flex items-center text-gray-600 mb-6 hover:text-at-blue font-bold transition-colors text-sm sm:text-base">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back
+        </a>
+
+        <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-100">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Personal Details</h2>
+            <p class="text-gray-400 font-bold text-xs uppercase tracking-widest mb-8">Step 2 of 3</p>
+
+            <form id="app-form-2" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-bold text-gray-600 mb-2">First Name</label>
+                    <input type="text" id="first-name" placeholder="John" class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 focus:border-at-blue outline-none transition-colors font-medium text-gray-800" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-600 mb-2">Last Name</label>
+                    <input type="text" id="last-name" placeholder="Doe" class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 focus:border-at-blue outline-none transition-colors font-medium text-gray-800" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-600 mb-2">Email Address</label>
+                    <input type="email" id="email" placeholder="john@example.com" class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 focus:border-at-blue outline-none transition-colors font-medium text-gray-800" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-600 mb-2">AirtelTigo Number</label>
+                    <div class="flex gap-0">
+                        <span class="inline-flex items-center px-3 sm:px-4 rounded-l-xl border-2 border-r-0 border-gray-100 bg-gray-50 text-at-blue font-bold text-sm">+233</span>
+                        <input type="tel" id="phone" placeholder="Enter your AT Money number" maxlength="10" class="flex-1 min-w-0 block w-full border-2 border-gray-100 rounded-none rounded-r-xl px-4 py-3 focus:border-at-blue outline-none transition-colors font-bold text-lg text-gray-800" required>
+                    </div>
+                    <p id="phone-error" class="mt-2 text-xs sm:text-sm text-red-500 font-bold hidden">Invalid AirtelTigo number. Please enter a valid AT Money number.</p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
+                    <button type="button" onclick="history.back()" class="flex-1 bg-gray-100 text-gray-500 font-bold py-4 rounded-xl hover:bg-gray-200 transition-all text-base sm:text-lg">
+                        PREVIOUS
+                    </button>
+                    <button type="submit" id="submit-btn" class="flex-1 bg-at-blue text-white font-bold py-4 rounded-xl hover:shadow-lg transition-all text-base sm:text-lg">
+                        NEXT STEP
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <footer class="text-center py-8 sm:py-12 text-gray-400 text-xs sm:text-sm">
+            © 2026 Airteltigo Ghana
+        </footer>
+    </div>
+
+    <script>
+        const form = document.getElementById('app-form-2');
+        const firstName = document.getElementById('first-name');
+        const lastName = document.getElementById('last-name');
+        const email = document.getElementById('email');
+
+        const phone = document.getElementById('phone');
+        const phoneError = document.getElementById('phone-error');
+
+        const data = AppData.get();
+        if (data.firstName) firstName.value = data.firstName;
+        if (data.lastName) lastName.value = data.lastName;
+        if (data.email) email.value = data.email;
+
+        if (data.fullPhone) {
+            phone.value = data.fullPhone.replace('+233', '');
+        }
+
+        function validatePhone(number) {
+            const atPrefixes = ['027', '057', '026', '056', '27', '57', '26', '56'];
+            return atPrefixes.some(prefix => number.startsWith(prefix)) && (number.length === 9 || number.length === 10);
+        }
+
+        phone.addEventListener('input', () => {
+            phoneError.classList.add('hidden');
+            phone.classList.remove('border-red-500');
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const phoneNumber = phone.value.trim();
+            
+            if (!validatePhone(phoneNumber)) {
+                phoneError.classList.remove('hidden');
+                phone.classList.add('border-red-500');
+                phone.parentElement.classList.add('error-shake');
+                setTimeout(() => phone.parentElement.classList.remove('error-shake'), 400);
+                return;
+            }
+
+            AppData.save({
+                firstName: firstName.value,
+                lastName: lastName.value,
+                email: email.value,
+                fullPhone: '+233' + phoneNumber.replace(/^0/, '')
+            });
+            location.href = 'application-step3.html';
+        });
+    </script>
+</body>
+</html>

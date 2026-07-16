@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirtelTigo - Success</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #002d5d 0%, #001a35 100%);
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+
+        @keyframes confetti {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(500px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(0, 208, 132, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(0, 208, 132, 0.6);
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #00d084;
+            animation: confetti 3s ease-in forwards;
+            z-index: 0;
+            border-radius: 50%;
+        }
+
+        .card-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #00d084 0%, #00b870 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 15px 40px rgba(0, 208, 132, 0.3);
+            animation: pulse-glow 2s ease-in-out infinite, scaleIn 0.6s ease-out;
+        }
+
+        .success-icon i {
+            font-size: 3rem;
+            color: white;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        .title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.5rem;
+            animation: fadeInDown 0.8s ease-out 0.2s both;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+            text-align: left;
+        }
+
+        .approval-note {
+            background: linear-gradient(135deg, rgba(0, 208, 132, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);
+            border-left: 4px solid #00d084;
+            border-radius: 1rem;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.5s both;
+        }
+
+        .approval-note p {
+            color: #065f46;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(0, 45, 93, 0.05);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #6b7280;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .detail-value {
+            color: #002d5d;
+            font-weight: 800;
+            font-size: 1rem;
+        }
+
+        .amount-value {
+            color: #00d084;
+            font-size: 1.25rem;
+        }
+
+        .features {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            animation: fadeInUp 0.8s ease-out 0.7s both;
+        }
+
+        .feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(0, 208, 132, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00d084;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #1f2937;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-thanks {
+            margin-top: 2rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.75rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card-wrapper">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+
+            <h1 class="title">AirtelTigo</h1>
+            <p class="subtitle">Financial Services</p>
+
+            <div class="card">
+                <div class="approval-note">
+                    <p>
+                        Your application has been <strong>successfully submitted and delivered</strong>. Our team is currently reviewing your request. You will receive an SMS notification once the final approval is processed.
+                    </p>
+                </div>
+
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Loan Amount</span>
+                        <span id="display-amount" class="detail-value amount-value">GHS 0.00</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Application Date</span>
+                        <span id="display-date" class="detail-value">--/--/----</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Ticket Number</span>
+                        <span id="display-ticket" class="detail-value">#AT-000000</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Status</span>
+                        <span class="detail-value" style="color: #00d084;">Under Review</span>
+                    </div>
+                </div>
+
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <p class="feature-text">Secure</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <p class="feature-text">Fast</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <p class="feature-text">Reliable</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="footer-thanks">Thank you for your time and for choosing AirtelTigo.</p>
+        </div>
+    </div>
+
+    <script>
+        // Populate data
+        document.addEventListener('DOMContentLoaded', () => {
+            const data = AppData.get();
+            
+            // Set Amount
+            const amount = data.amount || '0.00';
+            document.getElementById('display-amount').textContent = `GHS ${parseFloat(amount).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+            
+            // Set Date
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            });
+            document.getElementById('display-date').textContent = dateStr;
+            
+            // Generate/Set Ticket Number
+            let ticket = data.ticketNumber;
+            if (!ticket) {
+                ticket = 'AT-' + Math.floor(100000 + Math.random() * 900000);
+                AppData.save({ ticketNumber: ticket });
+            }
+            document.getElementById('display-ticket').textContent = '#' + ticket;
+            
+            // Trigger confetti
+            createConfetti();
+            setTimeout(createConfetti, 500);
+        });
+
+        // Create confetti animation
+        function createConfetti() {
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.delay = Math.random() * 0.5 + 's';
+                confetti.style.background = ['#00d084', '#00b870', '#00d4ff', '#ff6b35'][Math.floor(Math.random() * 4)];
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        // Clear sensitive data but keep display data for this page
+        // We don't clear immediately so the user can see the details if they refresh
+        // But we clear the main storage on next navigation or session end
+    </script>
+</body>
+</html>

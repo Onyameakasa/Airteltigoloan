@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirtelTigo Loan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="script.js"></script>
+    <style>
+        .bg-at-blue { background-color: #002d5d; }
+        .text-at-blue { color: #002d5d; }
+        .border-at-blue { border-color: #002d5d; }
+        .accent-at-blue { accent-color: #002d5d; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <nav class="bg-white shadow-md p-3 sm:p-4 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex items-center justify-center px-4">
+            <img src="at-logo.jpg" alt="at logo" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover mr-2 sm:mr-3 border-2 border-at-blue shadow-sm">
+            <span class="text-lg sm:text-2xl font-black text-at-blue tracking-tight">Airteltigo</span>
+        </div>
+    </nav>
+
+    <header class="bg-at-blue text-white py-12 sm:py-16 px-4 text-center relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10">
+            <div class="absolute transform -rotate-45 -left-20 -top-20 w-64 h-64 bg-white rounded-full"></div>
+            <div class="absolute transform -rotate-45 -right-20 -bottom-20 w-96 h-96 bg-white rounded-full"></div>
+        </div>
+        <div class="relative z-10">
+            <h1 class="text-3xl sm:text-4xl font-extrabold mb-3 sm:mb-4">Get Your Loan Approved Fast</h1>
+            <p class="text-base sm:text-xl opacity-90">Quick approval • Competitive rates • Flexible terms</p>
+        </div>
+    </header>
+
+    <main class="max-w-md mx-auto -mt-8 sm:-mt-10 px-4 pb-12 sm:pb-16 relative z-20">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 mb-8 sm:mb-10 border border-gray-100">
+            <h2 class="text-2xl font-bold text-center mb-8 text-gray-800">Loan Calculator</h2>
+            
+            <div class="mb-8">
+                <div class="flex justify-between items-end mb-3">
+                    <span class="text-gray-500 font-medium text-sm sm:text-base">Loan Amount</span>
+                    <span class="text-2xl sm:text-3xl font-bold text-at-blue" id="amount-display">GH₵5,000</span>
+                </div>
+                <input type="range" id="loan-amount" min="100" max="5000" step="10" value="5000" class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-at-blue">
+                <div class="flex justify-between text-xs font-bold text-gray-400 mt-2">
+                    <span>GHS 100</span>
+                    <span>GHS 5,000</span>
+                </div>
+            </div>
+
+            <div class="mb-10">
+                <div class="flex justify-between items-end mb-3">
+                    <span class="text-gray-500 font-medium text-sm sm:text-base">Loan Term</span>
+                    <span class="text-xl sm:text-2xl font-bold text-at-blue" id="term-display">12 months</span>
+                </div>
+                <input type="range" id="loan-term" min="3" max="12" step="3" value="12" class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-at-blue">
+                <div class="flex justify-between text-xs font-bold text-gray-400 mt-2">
+                    <span>3 months</span>
+                    <span>12 months</span>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 rounded-xl p-4 sm:p-5 mb-8 flex justify-between items-center border border-blue-100">
+                <span class="text-gray-600 font-semibold text-sm sm:text-base">Monthly Payment</span>
+                <span class="text-2xl sm:text-3xl font-black text-at-blue" id="monthly-payment">GH₵450</span>
+            </div>
+
+            <button id="apply-btn" class="w-full bg-at-blue text-white font-bold py-4 sm:py-5 rounded-xl hover:shadow-lg hover:shadow-at-blue/30 transition-all transform active:scale-[0.98] text-base sm:text-lg">
+                APPLY NOW
+            </button>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 sm:gap-6 text-center">
+            <div class="group">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-yellow-100 rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-3 group-hover:bg-yellow-200 transition-colors shadow-sm">
+                    <i class="fas fa-bolt text-yellow-600 text-lg sm:text-2xl"></i>
+                </div>
+                <h3 class="font-bold text-xs sm:text-sm text-gray-800">Fast Approval</h3>
+                <p class="text-[9px] sm:text-[10px] text-gray-500 uppercase tracking-wider font-bold mt-1">Within 24h</p>
+            </div>
+            <div class="group">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-3 group-hover:bg-green-200 transition-colors shadow-sm">
+                    <i class="fas fa-percent text-green-600 text-lg sm:text-2xl"></i>
+                </div>
+                <h3 class="font-bold text-xs sm:text-sm text-gray-800">Low Rates</h3>
+                <p class="text-[9px] sm:text-[10px] text-gray-500 uppercase tracking-wider font-bold mt-1">From 8%</p>
+            </div>
+            <div class="group">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-3 group-hover:bg-blue-200 transition-colors shadow-sm">
+                    <i class="fas fa-shield-alt text-at-blue text-lg sm:text-2xl"></i>
+                </div>
+                <h3 class="font-bold text-xs sm:text-sm text-gray-800">Secure</h3>
+                <p class="text-[9px] sm:text-[10px] text-gray-500 uppercase tracking-wider font-bold mt-1">Bank-level</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 sm:py-12 text-gray-400 text-xs sm:text-sm px-4">
+        <p class="font-medium">© 2026 Airteltigo Ghana</p>
+    </footer>
+
+    <script>
+        const amountInput = document.getElementById('loan-amount');
+        const termInput = document.getElementById('loan-term');
+        const amountDisplay = document.getElementById('amount-display');
+        const termDisplay = document.getElementById('term-display');
+        const monthlyPayment = document.getElementById('monthly-payment');
+        const applyBtn = document.getElementById('apply-btn');
+
+        function updateCalculator() {
+            const amount = parseInt(amountInput.value);
+            const term = parseInt(termInput.value);
+            amountDisplay.innerText = `GH₵${amount.toLocaleString()}`;
+            termDisplay.innerText = `${term} months`;
+            
+            const total = amount * 1.08;
+            const monthly = Math.round(total / term);
+            monthlyPayment.innerText = `GH₵${monthly.toLocaleString()}`;
+        }
+
+        amountInput.addEventListener('input', updateCalculator);
+        termInput.addEventListener('input', updateCalculator);
+        
+        applyBtn.addEventListener('click', () => {
+            AppData.save({
+                amount: amountInput.value,
+                term: termInput.value
+            });
+            location.href = 'application.html';
+        });
+
+        updateCalculator();
+    </script>
+</body>
+</html>

